@@ -1,0 +1,125 @@
+# Roadmap: ccxl (Claude Code XL)
+
+## Overview
+
+Transform ccxl from an outdated setup script into a unified CLI platform that generates the complete AI coding assistant configuration stack. Start with a TypeScript foundation and Ink TUI, build a deep project analyzer, generate full Claude Code configs (skills, hooks, agents, MCP, permissions), output cross-tool configs (Cursor, Copilot, Windsurf), add a community registry for sharing configs, then layer on maintenance and team governance.
+
+## Domain Expertise
+
+None
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+- [ ] **Phase 1: Foundation** - TypeScript project setup, Ink TUI scaffold, CLI entry point
+- [ ] **Phase 2: Project Analyzer** - Deep project scanning and detection engine
+- [ ] **Phase 3: Claude Code Generator** - Full Claude Code config stack generation
+- [ ] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
+- [ ] **Phase 5: Community Registry** - Browse, install, share curated configs
+- [ ] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
+- [ ] **Phase 7: Team Governance** - Shared base configs, org-wide standards
+
+## Phase Details
+
+### Phase 1: Foundation
+**Goal**: Clean TypeScript project with Ink TUI, Commander CLI, and the scaffolding for all future phases
+**Depends on**: Nothing (first phase)
+**Research**: Unlikely (established patterns — TypeScript, Ink, Commander)
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01: TypeScript project setup — tsconfig, build pipeline, ESLint, package.json rewrite
+- [ ] 01-02: CLI entry point with Commander — command structure, global flags, help text
+- [ ] 01-03: Ink TUI scaffold — base components, interactive prompts, progress display, preview panels
+
+### Phase 2: Project Analyzer
+**Goal**: Deep project scanning engine that detects languages, frameworks, dependencies, monorepo structure, CI/CD, cloud providers, databases, and existing AI tool configs
+**Depends on**: Phase 1
+**Research**: Unlikely (file parsing, pattern matching — internal logic)
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01: Core analyzer architecture — plugin-based detector system, analysis result types
+- [ ] 02-02: Language and framework detection — package.json, pyproject.toml, go.mod, Cargo.toml, framework fingerprinting
+- [ ] 02-03: Infrastructure detection — CI/CD (GitHub Actions, GitLab CI), cloud providers (AWS, GCP, Azure), databases, Docker, monorepo tools
+- [ ] 02-04: Existing config detection — scan for .claude/, .cursorrules, copilot-instructions.md, .windsurfrules, detect what's already configured
+
+### Phase 3: Claude Code Generator
+**Goal**: Generate the complete Claude Code configuration stack — settings.json, skills, hooks, AGENTS.md, .mcp.json, permissions, keybindings, status line, CLAUDE.md — all tuned to the analyzed project
+**Depends on**: Phase 2
+**Research**: Likely (need current Claude Code config schemas and formats)
+**Research topics**: Current settings.json schema, skill frontmatter format and trigger patterns, hook event types and matcher syntax, AGENTS.md frontmatter fields, .mcp.json format, permission rule syntax (Bash(cmd:*) patterns), keybindings.json format, status line template syntax
+**Plans**: 5 plans
+
+Plans:
+- [ ] 03-01: Settings and permissions generator — fine-grained permission rules matched to detected stack
+- [ ] 03-02: Skills generator — .claude/skills/ with proper frontmatter, triggers, tool restrictions, project-appropriate skills
+- [ ] 03-03: Hooks generator — PreToolUse/PostToolUse hooks using current event system, matchers, hook types
+- [ ] 03-04: Agents and MCP generator — AGENTS.md with project-appropriate subagents, .mcp.json with relevant MCP servers
+- [ ] 03-05: CLAUDE.md and extras generator — deep codebase-aware project context, keybindings, status line, output styles
+
+### Phase 4: Cross-Tool Output
+**Goal**: Generate configuration files for Cursor, GitHub Copilot, and Windsurf from the same analyzer results
+**Depends on**: Phase 2 (uses analyzer, parallel with Phase 3)
+**Research**: Likely (need current config formats for each tool)
+**Research topics**: .cursorrules format and capabilities, copilot-instructions.md format, .windsurfrules format, what each tool supports vs Claude Code
+**Plans**: 3 plans
+
+Plans:
+- [ ] 04-01: Output adapter architecture — shared analyzer results, per-tool adapters, capability mapping
+- [ ] 04-02: Cursor and Copilot adapters — .cursorrules and copilot-instructions.md generation
+- [ ] 04-03: Windsurf adapter and unified output — .windsurfrules generation, combined output with conflict detection
+
+### Phase 5: Community Registry
+**Goal**: Browse, install, and share curated skills, hooks, agents, and config packages from a GitHub-based registry
+**Depends on**: Phase 3
+**Research**: Likely (registry design patterns)
+**Research topics**: GitHub-based package registry patterns, config package format design, versioning strategy, discovery/search UX
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01: Registry architecture — package format spec, manifest schema, versioning
+- [ ] 05-02: Install and uninstall — fetch from GitHub, merge into local configs, dependency resolution
+- [ ] 05-03: Browse and search — TUI browser, categories, tags, popularity, compatibility filtering
+- [ ] 05-04: Publish and share — package creation wizard, validation, GitHub publishing flow
+
+### Phase 6: Config Maintenance
+**Goal**: Detect drift between codebase state and config, evolve configs as project changes, health checks and diagnostics
+**Depends on**: Phase 3
+**Research**: Unlikely (internal diffing/comparison logic)
+**Plans**: 3 plans
+
+Plans:
+- [ ] 06-01: Drift detection — compare current codebase against generated configs, flag stale/mismatched settings
+- [ ] 06-02: Config evolution — auto-suggest updates when dependencies change, new files added, framework migrations
+- [ ] 06-03: Diagnostics — health checks, permission audits, config validation, conflict detection, fix suggestions
+
+### Phase 7: Team Governance
+**Goal**: Shared base configs with org-wide standards and per-project overrides
+**Depends on**: Phase 5, Phase 6
+**Research**: Unlikely (config merging patterns, established conventions)
+**Plans**: 3 plans
+
+Plans:
+- [ ] 07-01: Base config system — shareable config packages, inheritance/override model
+- [ ] 07-02: Org-wide standards — policy enforcement, required permissions, blocked patterns
+- [ ] 07-03: Sync and compliance — config sync across repos, compliance reporting, drift alerts
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
+Note: Phase 4 can run in parallel with Phase 3 (both depend on Phase 2)
+
+| Phase | Plans Complete | Status | Completed |
+|-------|---------------|--------|-----------|
+| 1. Foundation | 0/3 | Not started | - |
+| 2. Project Analyzer | 0/4 | Not started | - |
+| 3. Claude Code Generator | 0/5 | Not started | - |
+| 4. Cross-Tool Output | 0/3 | Not started | - |
+| 5. Community Registry | 0/4 | Not started | - |
+| 6. Config Maintenance | 0/3 | Not started | - |
+| 7. Team Governance | 0/3 | Not started | - |
