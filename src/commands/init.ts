@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import chalk from 'chalk';
+import { style } from '../tui/theme.js';
 
 export function registerInitCommand(program: Command): void {
   program
@@ -10,11 +10,19 @@ export function registerInitCommand(program: Command): void {
     .option('-q, --quiet', 'Minimal output')
     .option('-v, --verbose', 'Detailed output')
     .option('-f, --force', 'Overwrite existing configs')
-    .action((options) => {
-      if (options.dryRun) {
-        console.log(chalk.dim('Dry run mode — no files will be written\n'));
+    .action(async (options) => {
+      if (options.yes) {
+        console.log(style.muted('Auto mode — using smart defaults'));
+        console.log(style.warning('⏳ Not implemented yet — coming in Phase 2+3'));
+        return;
       }
-      console.log(chalk.yellow('⏳ Not implemented yet — coming in Phase 2 (Project Analyzer) + Phase 3 (Generator)'));
-      console.log(chalk.dim('  This will scan your project and generate the full config stack.'));
+
+      // Dynamic import to keep JSX in .tsx files
+      const React = await import('react');
+      const { render } = await import('ink');
+      const { version } = await import('../index.js');
+      const { InitView } = await import('../tui/views/InitView.js');
+
+      render(React.createElement(InitView, { version }));
     });
 }

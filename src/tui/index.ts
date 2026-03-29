@@ -1,1 +1,11 @@
-// TUI components — Plan 01-03
+export { App } from './App.js';
+export { Header } from './components/Header.js';
+export { StatusBar } from './components/StatusBar.js';
+export { Spinner } from './components/Spinner.js';
+export { SelectPrompt } from './components/SelectPrompt.js';
+export type { SelectOption } from './components/SelectPrompt.js';
+export { ConfirmPrompt } from './components/ConfirmPrompt.js';
+export { PreviewPanel } from './components/PreviewPanel.js';
+export { FileList } from './components/FileList.js';
+export type { FileEntry } from './components/FileList.js';
+export { colors, style } from './theme.js';
