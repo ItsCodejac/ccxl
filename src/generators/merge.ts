@@ -90,16 +90,37 @@ function mergeSettings(
     result['env'] = { ...incomingEnv, ...existingEnv };
   }
 
-  // Merge hooks (concatenate arrays per event)
+  // Merge hooks (deduplicate by command path per event)
   const existingHooks = (existing['hooks'] ?? {}) as Record<string, unknown[]>;
   const incomingHooks = (incoming['hooks'] ?? {}) as Record<string, unknown[]>;
   if (Object.keys(incomingHooks).length > 0) {
     const mergedHooks: Record<string, unknown[]> = { ...existingHooks };
     for (const [event, hooks] of Object.entries(incomingHooks)) {
-      mergedHooks[event] = [...(existingHooks[event] ?? []), ...hooks];
+      const existingForEvent = existingHooks[event] ?? [];
+      const seen = new Set<string>();
+      // Track existing hooks by their command path
+      for (const h of existingForEvent) {
+        const key = hookKey(h);
+        if (key) seen.add(key);
+      }
+      // Only add incoming hooks that don't already exist
+      const newHooks = hooks.filter((h) => {
+        const key = hookKey(h);
+        return !key || !seen.has(key);
+      });
+      mergedHooks[event] = [...existingForEvent, ...newHooks];
     }
     result['hooks'] = mergedHooks;
   }
 
   return result;
+}
+
+function hookKey(hook: unknown): string | null {
+  if (!hook || typeof hook !== 'object') return null;
+  const h = hook as Record<string, unknown>;
+  const matcher = h['matcher'] as string ?? '';
+  const hooks = h['hooks'] as Array<Record<string, unknown>> | undefined;
+  const cmd = hooks?.[0]?.['command'] as string ?? '';
+  return cmd ? `${matcher}:${cmd}` : null;
 }

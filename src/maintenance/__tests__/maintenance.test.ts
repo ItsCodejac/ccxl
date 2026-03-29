@@ -62,12 +62,12 @@ describe('runDiagnostics', () => {
     expect(hookCheck?.status).toBe('pass');
   });
 
-  it('detects conflicting Cursor configs', async () => {
+  it('reports both Cursor formats as normal (ccxl generates both)', async () => {
     await fs.writeFile(path.join(tmpDir, '.cursorrules'), 'rules');
     await fs.ensureDir(path.join(tmpDir, '.cursor', 'rules'));
     const results = await runDiagnostics(tmpDir);
     const conflictCheck = results.find((r) => r.name === 'Config conflicts');
-    expect(conflictCheck?.status).toBe('warn');
+    expect(conflictCheck?.status).toBe('pass');
   });
 
   it('passes conflict check with no duplicates', async () => {

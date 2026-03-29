@@ -103,7 +103,7 @@ export async function runDiagnostics(
   const hasLegacyCursor = await fs.pathExists(path.join(root, '.cursorrules'));
   const hasModernCursor = await fs.pathExists(path.join(root, '.cursor', 'rules'));
   if (hasLegacyCursor && hasModernCursor) {
-    results.push({ name: 'Config conflicts', status: 'warn', message: 'Both .cursorrules and .cursor/rules/ exist — modern format takes priority' });
+    results.push({ name: 'Config conflicts', status: 'pass', message: 'Cursor: both legacy + modern formats (ccxl default)' });
   } else {
     results.push({ name: 'Config conflicts', status: 'pass', message: 'No conflicts detected' });
   }

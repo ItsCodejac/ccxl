@@ -73,32 +73,56 @@ function buildArchitecture(a: ProjectAnalysis): string {
 function buildDevelopment(a: ProjectAnalysis): string {
   const pm = a.packageManager?.name ?? 'npm';
   const parts: string[] = ['## Development\n'];
+  const langNames = new Set(a.languages.map((l) => l.name));
+  const isPython = langNames.has('python') && !langNames.has('javascript') && !langNames.has('typescript');
+  const isGo = langNames.has('go') && !langNames.has('javascript') && !langNames.has('typescript');
+  const isRust = langNames.has('rust') && !langNames.has('javascript') && !langNames.has('typescript');
 
   parts.push('```bash');
-  parts.push(`# Install dependencies`);
-  parts.push(pm === 'yarn' ? 'yarn' : pm === 'pnpm' ? 'pnpm install' : pm === 'bun' ? 'bun install' : 'npm install');
-  parts.push('');
-  parts.push('# Run development server');
-  parts.push(`${pm} run dev`);
-  parts.push('');
-  parts.push('# Run tests');
 
-  const testFw = a.frameworks.find((f) => f.category === 'test');
-  if (testFw) {
-    parts.push(pm === 'npm' ? `npm run test` : `${pm} test`);
-  } else if (a.languages.some((l) => l.name === 'python')) {
+  if (isPython) {
+    parts.push('# Install dependencies');
+    parts.push('pip install -e ".[dev]"  # or: pip install -r requirements.txt');
+    parts.push('');
+    parts.push('# Run development server');
+    const hasFastapi = a.frameworks.some((f) => f.name === 'fastapi');
+    const hasDjango = a.frameworks.some((f) => f.name === 'django');
+    parts.push(hasFastapi ? 'uvicorn src.main:app --reload' : hasDjango ? 'python manage.py runserver' : 'python -m src.main');
+    parts.push('');
+    parts.push('# Run tests');
     parts.push('pytest');
-  } else if (a.languages.some((l) => l.name === 'go')) {
+  } else if (isGo) {
+    parts.push('# Run tests');
     parts.push('go test ./...');
-  } else if (a.languages.some((l) => l.name === 'rust')) {
+    parts.push('');
+    parts.push('# Build');
+    parts.push('go build ./...');
+  } else if (isRust) {
+    parts.push('# Run tests');
     parts.push('cargo test');
+    parts.push('');
+    parts.push('# Build');
+    parts.push('cargo build');
   } else {
-    parts.push(`${pm} test`);
+    // JS/TS or mixed projects
+    parts.push('# Install dependencies');
+    parts.push(pm === 'yarn' ? 'yarn' : pm === 'pnpm' ? 'pnpm install' : pm === 'bun' ? 'bun install' : 'npm install');
+    parts.push('');
+    parts.push('# Run development server');
+    parts.push(`${pm} run dev`);
+    parts.push('');
+    parts.push('# Run tests');
+    const testFw = a.frameworks.find((f) => f.category === 'test');
+    if (testFw) {
+      parts.push(pm === 'npm' ? 'npm run test' : `${pm} test`);
+    } else {
+      parts.push(`${pm} test`);
+    }
+    parts.push('');
+    parts.push('# Build');
+    parts.push(`${pm} run build`);
   }
 
-  parts.push('');
-  parts.push('# Build');
-  parts.push(`${pm} run build`);
   parts.push('```\n');
 
   return parts.join('\n');
