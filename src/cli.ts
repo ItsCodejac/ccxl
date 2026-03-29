@@ -33,12 +33,6 @@ registerConfigCommand(program);
 
 // Default action: show dashboard when no command given
 program.action(async () => {
-  // Check if stdin supports raw mode (required for interactive TUI)
-  if (!process.stdin.isTTY) {
-    program.help();
-    return;
-  }
-
   const React = await import('react');
   const { render } = await import('ink');
   const path = await import('node:path');
@@ -61,8 +55,13 @@ program.action(async () => {
     packageCount = data.packages.length;
   }
 
-  const { Dashboard } = await import('./tui/dashboard/Dashboard.js');
-  render(React.createElement(Dashboard, { version, projectName, configStatus, packageCount }));
+  try {
+    const { Dashboard } = await import('./tui/dashboard/Dashboard.js');
+    render(React.createElement(Dashboard, { version, projectName, configStatus, packageCount }));
+  } catch {
+    // Fallback if terminal doesn't support raw mode (e.g., piped, CI)
+    program.help();
+  }
 });
 
 program.parseAsync().catch((err: Error) => {
