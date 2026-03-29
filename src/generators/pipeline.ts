@@ -1,3 +1,5 @@
+import os from 'node:os';
+import path from 'node:path';
 import type { ProjectAnalysis } from '../types/index.js';
 import type { GeneratedFile } from './types.js';
 import { GeneratorPipeline } from './generator.js';
@@ -10,7 +12,32 @@ import { claudeMdGenerator } from './claude-md.js';
 import { mergeWithExisting } from './merge.js';
 
 export interface PipelineOptions {
-  merge?: boolean; // default true — set false with --force
+  merge?: boolean;
+  scope?: 'project' | 'global';
+}
+
+export function getTargetRoot(scope: 'project' | 'global', projectRoot: string): string {
+  if (scope === 'global') {
+    return path.join(os.homedir(), '.claude');
+  }
+  return projectRoot;
+}
+
+export function createGlobalAnalysis(): ProjectAnalysis {
+  return {
+    name: 'global',
+    root: path.join(os.homedir(), '.claude'),
+    languages: [],
+    frameworks: [],
+    packageManager: null,
+    monorepo: null,
+    ci: [],
+    cloud: [],
+    databases: [],
+    docker: null,
+    existingConfigs: [],
+    analyzedAt: new Date(),
+  };
 }
 
 export async function runPipeline(
@@ -18,7 +45,7 @@ export async function runPipeline(
   root: string,
   options: PipelineOptions = {},
 ): Promise<GeneratedFile[]> {
-  const { merge = true } = options;
+  const { merge = true, scope = 'project' } = options;
 
   const pipeline = new GeneratorPipeline();
 
@@ -26,13 +53,30 @@ export async function runPipeline(
   pipeline.register(skillsGenerator);
   pipeline.register(hooksGenerator);
   pipeline.register(agentsGenerator);
-  pipeline.register(mcpGenerator);
-  pipeline.register(claudeMdGenerator);
 
-  let files = await pipeline.run(analysis, root);
+  // MCP and CLAUDE.md only for project scope
+  if (scope === 'project') {
+    pipeline.register(mcpGenerator);
+    pipeline.register(claudeMdGenerator);
+  }
+
+  const targetRoot = getTargetRoot(scope, root);
+  let files = await pipeline.run(analysis, targetRoot);
+
+  // For global scope, prefix paths with .claude/ if they aren't already
+  if (scope === 'global') {
+    files = files.map((f) => {
+      // Global paths: .claude/skills/... → skills/... (already inside ~/.claude/)
+      // But settings.json needs to stay as settings.json inside ~/.claude/
+      const adjustedPath = f.path.startsWith('.claude/')
+        ? f.path.slice('.claude/'.length)
+        : f.path;
+      return { ...f, path: adjustedPath };
+    });
+  }
 
   if (merge) {
-    files = await mergeWithExisting(root, files);
+    files = await mergeWithExisting(targetRoot, files);
   }
 
   return files;

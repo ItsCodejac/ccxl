@@ -3,7 +3,8 @@ import type { Command } from 'commander';
 import fs from 'fs-extra';
 import { style } from '../tui/theme.js';
 import { analyzeProject } from '../analyzer/index.js';
-import { runPipeline } from '../generators/pipeline.js';
+import { runPipeline, createGlobalAnalysis, getTargetRoot } from '../generators/pipeline.js';
+import type { ProjectAnalysis } from '../types/index.js';
 
 export function registerInitCommand(program: Command): void {
   program
@@ -14,17 +15,26 @@ export function registerInitCommand(program: Command): void {
     .option('-q, --quiet', 'Minimal output')
     .option('-v, --verbose', 'Detailed output')
     .option('-f, --force', 'Overwrite existing configs')
+    .option('-g, --global', 'Install universal configs to ~/.claude/')
     .action(async (options) => {
-      const root = process.cwd();
+      const scope = options.global ? 'global' as const : 'project' as const;
+      const projectRoot = process.cwd();
 
-      if (options.yes || options.dryRun) {
-        // Non-interactive: scan + generate
-        console.log(style.highlight('Scanning project...'));
-        const analysis = await analyzeProject(root);
-        printAnalysis(analysis);
+      if (options.yes || options.dryRun || options.global) {
+        let analysis: ProjectAnalysis;
+
+        if (options.global) {
+          console.log(style.highlight('Installing global config to ~/.claude/'));
+          analysis = createGlobalAnalysis();
+        } else {
+          console.log(style.highlight('Scanning project...'));
+          analysis = await analyzeProject(projectRoot);
+          printAnalysis(analysis);
+        }
 
         console.log(style.highlight('\nGenerating configs...'));
-        const files = await runPipeline(analysis, root, { merge: !options.force });
+        const targetRoot = getTargetRoot(scope, projectRoot);
+        const files = await runPipeline(analysis, projectRoot, { merge: !options.force, scope });
 
         const newFiles = files.filter((f) => f.status === 'new');
         const modifiedFiles = files.filter((f) => f.status === 'modified');
@@ -43,16 +53,15 @@ export function registerInitCommand(program: Command): void {
           return;
         }
 
-        // Only write new and modified files
         const toWrite = files.filter((f) => f.status !== 'unchanged');
         for (const file of toWrite) {
-          const fullPath = path.join(root, file.path);
+          const fullPath = path.join(targetRoot, file.path);
           await fs.ensureDir(path.dirname(fullPath));
           await fs.writeFile(fullPath, file.content);
         }
 
-        console.log(`\n${style.success('✓')} ${style.bold(`${toWrite.length} files written`)} (${unchangedFiles.length} existing preserved)`);
-        console.log(style.muted('Run `claude` to start using your new config.'));
+        console.log(`\n${style.success('✓')} ${style.bold(`${toWrite.length} files written`)}${unchangedFiles.length > 0 ? ` (${unchangedFiles.length} existing preserved)` : ''}`);
+        console.log(style.muted(options.global ? 'Global config installed.' : 'Run `claude` to start using your new config.'));
         return;
       }
 
@@ -66,7 +75,7 @@ export function registerInitCommand(program: Command): void {
     });
 }
 
-function printAnalysis(analysis: Awaited<ReturnType<typeof analyzeProject>>): void {
+function printAnalysis(analysis: ProjectAnalysis): void {
   console.log();
   console.log(style.bold(`Project: ${analysis.name}`));
   console.log(style.muted(analysis.root));
