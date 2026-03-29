@@ -57,6 +57,7 @@ The existing ccxl v2.0.0-alpha.1 codebase is a full rewrite target. The current 
 - **Package**: Must publish as `ccxl` on npm (existing listing)
 - **Runtime**: Node.js >= 20.0.0
 - **Language**: TypeScript (full rewrite from JavaScript)
+- **TUI**: Ink (React-based terminal UI)
 - **Distribution**: CLI via npx/npm install -g
 
 ## Key Decisions
