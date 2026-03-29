@@ -24,11 +24,18 @@ export function registerInitCommand(program: Command): void {
         printAnalysis(analysis);
 
         console.log(style.highlight('\nGenerating configs...'));
-        const files = await runPipeline(analysis, root);
+        const files = await runPipeline(analysis, root, { merge: !options.force });
 
-        console.log(style.heading(`\nFiles to generate (${files.length}):`));
+        const newFiles = files.filter((f) => f.status === 'new');
+        const modifiedFiles = files.filter((f) => f.status === 'modified');
+        const unchangedFiles = files.filter((f) => f.status === 'unchanged');
+
+        console.log(style.heading(`\nFiles (${newFiles.length} new, ${modifiedFiles.length} merged, ${unchangedFiles.length} skipped):`));
         for (const file of files) {
-          console.log(`  ${style.success('+')} ${file.path}`);
+          const icon = file.status === 'new' ? style.success('+')
+            : file.status === 'modified' ? style.warning('~')
+            : style.muted('=');
+          console.log(`  ${icon} ${file.path} ${style.muted(`(${file.status})`)}`);
         }
 
         if (options.dryRun) {
@@ -36,14 +43,15 @@ export function registerInitCommand(program: Command): void {
           return;
         }
 
-        // Write files
-        for (const file of files) {
+        // Only write new and modified files
+        const toWrite = files.filter((f) => f.status !== 'unchanged');
+        for (const file of toWrite) {
           const fullPath = path.join(root, file.path);
           await fs.ensureDir(path.dirname(fullPath));
           await fs.writeFile(fullPath, file.content);
         }
 
-        console.log(`\n${style.success('✓')} ${style.bold(`${files.length} files written`)}`);
+        console.log(`\n${style.success('✓')} ${style.bold(`${toWrite.length} files written`)} (${unchangedFiles.length} existing preserved)`);
         console.log(style.muted('Run `claude` to start using your new config.'));
         return;
       }

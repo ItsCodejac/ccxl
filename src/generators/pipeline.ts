@@ -7,11 +7,19 @@ import { hooksGenerator } from './hooks.js';
 import { agentsGenerator } from './agents.js';
 import { mcpGenerator } from './mcp.js';
 import { claudeMdGenerator } from './claude-md.js';
+import { mergeWithExisting } from './merge.js';
+
+export interface PipelineOptions {
+  merge?: boolean; // default true — set false with --force
+}
 
 export async function runPipeline(
   analysis: ProjectAnalysis,
   root: string,
+  options: PipelineOptions = {},
 ): Promise<GeneratedFile[]> {
+  const { merge = true } = options;
+
   const pipeline = new GeneratorPipeline();
 
   pipeline.register(settingsGenerator);
@@ -21,7 +29,13 @@ export async function runPipeline(
   pipeline.register(mcpGenerator);
   pipeline.register(claudeMdGenerator);
 
-  return pipeline.run(analysis, root);
+  let files = await pipeline.run(analysis, root);
+
+  if (merge) {
+    files = await mergeWithExisting(root, files);
+  }
+
+  return files;
 }
 
 export { settingsGenerator, skillsGenerator, hooksGenerator, agentsGenerator, mcpGenerator, claudeMdGenerator };
