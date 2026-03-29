@@ -31,7 +31,7 @@ None
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TypeScript project setup — tsconfig, build pipeline, ESLint, package.json rewrite
+- [x] 01-01: TypeScript project setup — tsconfig, build pipeline, ESLint, package.json rewrite
 - [ ] 01-02: CLI entry point with Commander — command structure, global flags, help text
 - [ ] 01-03: Ink TUI scaffold — base components, interactive prompts, progress display, preview panels
 
@@ -116,7 +116,7 @@ Note: Phase 4 can run in parallel with Phase 3 (both depend on Phase 2)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 1/3 | In progress | - |
 | 2. Project Analyzer | 0/4 | Not started | - |
 | 3. Claude Code Generator | 0/5 | Not started | - |
 | 4. Cross-Tool Output | 0/3 | Not started | - |
