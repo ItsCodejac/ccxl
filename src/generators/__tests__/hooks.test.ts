@@ -77,4 +77,29 @@ describe('hooksGenerator', () => {
       expect(hook.hooks[0]?.if).toBeDefined();
     }
   });
+
+  it('always generates context-loader.sh for SessionStart', async () => {
+    const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
+    const paths = result.files.map((f) => f.path);
+    expect(paths).toContain('.claude/hooks/context-loader.sh');
+    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
+    const config = JSON.parse(hooksJson!.content);
+    expect(config.SessionStart).toBeDefined();
+  });
+
+  it('always generates reread-context.sh for PreCompact', async () => {
+    const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
+    const paths = result.files.map((f) => f.path);
+    expect(paths).toContain('.claude/hooks/reread-context.sh');
+    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
+    const config = JSON.parse(hooksJson!.content);
+    expect(config.PreCompact).toBeDefined();
+  });
+
+  it('context-loader outputs valid JSON format', async () => {
+    const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
+    const script = result.files.find((f) => f.path.includes('context-loader'));
+    expect(script?.content).toContain('hookSpecificOutput');
+    expect(script?.content).toMatch(/^#!/);
+  });
 });
