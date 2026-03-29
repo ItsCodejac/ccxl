@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-03-28)
 
 **Core value:** One command gives you a maxed-out, project-aware AI coding assistant environment that would take hours to configure manually — and keeps it maintained as your project evolves.
-**Current focus:** Phase 5 — Community Registry
+**Current focus:** Phase 6 — Config Maintenance
 
 ## Current Position
 
-Phase: 5 of 7 (Community Registry)
+Phase: 6 of 7 (Config Maintenance)
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-03-29 — Phase 4 complete (Cross-Tool Output)
+Last activity: 2026-03-29 — Phase 5 complete (Community Registry)
 
-Progress: ███████░░░ 64%
+Progress: ████████░░ 76%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
-- Average duration: 5.2 min
-- Total execution time: 1.4 hours
+- Total plans completed: 18
+- Average duration: 5 min
+- Total execution time: 1.5 hours
 
 **By Phase:**
 
@@ -32,21 +32,18 @@ Progress: ███████░░░ 64%
 | 3. Claude Code Generator | 5/5 | 24 min | 4.8 min |
 | 3.1 Critical Improvements | 3/3 | 12 min | 4 min |
 | 4. Cross-Tool Output | 1/1 | 6 min | 6 min |
+| 5. Community Registry | 2/2 | 8 min | 4 min |
 
 ## Accumulated Context
 
 ### Decisions
 
 - Full rewrite, TypeScript, Ink TUI, tsup, ESM-only
-- Zod schema-first types, discriminated union DetectorResult
-- Signal-based detection with declarative registries
-- Generator interface: { name, generate(analysis, root) }
-- Pipeline dedup by path (later generator wins)
-- Template pattern with condition functions
+- Zod schema-first, signal-based detection, generator/template patterns
 - Non-destructive merge, global install, force-read hooks
-- Cross-tool shared rules adapted per tool format
-- Both legacy (flat file) and modern (directory + frontmatter) formats for all tools
-- Phase 4 consolidated from 3 plans to 1 (all tools use same pattern)
+- Cross-tool shared rules with per-tool frontmatter adaptation
+- GitHub-based registry (no hosted backend)
+- ccxl-package.json manifest, GitHub topic "ccxl-package" for discovery
 
 ### Deferred Issues
 
@@ -55,5 +52,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-29
-Stopped at: Phase 4 complete, ready for Phase 5
+Stopped at: Phase 5 complete, ready for Phase 6
 Resume file: None

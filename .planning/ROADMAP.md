@@ -19,7 +19,7 @@ None
 - [x] **Phase 3: Claude Code Generator** - Full Claude Code config stack generation
 - [x] **Phase 3.1: Critical Improvements** - INSERTED: Force config reading hooks, non-destructive merge, global install
 - [x] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
-- [ ] **Phase 5: Community Registry** - Browse, install, share curated configs
+- [x] **Phase 5: Community Registry** - Browse, install, share curated configs
 - [ ] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
 - [ ] **Phase 7: Team Governance** - Shared base configs, org-wide standards
 
@@ -92,8 +92,8 @@ Plans:
 **Plans**: 2 plans (consolidated from 4)
 
 Plans:
-- [ ] 05-01: Package format + install/uninstall — manifest schema, GitHub fetch, merge into local configs
-- [ ] 05-02: Browse, search, list, publish — TUI browser, GitHub search, list installed, publish instructions
+- [x] 05-01: Package format + install/uninstall — manifest schema, GitHub fetch, merge into local configs
+- [x] 05-02: Browse, search, list, publish — TUI browser, GitHub search, list installed, publish instructions
 
 ### Phase 6: Config Maintenance
 **Goal**: Detect drift between codebase state and config, evolve configs as project changes, health checks and diagnostics
@@ -129,6 +129,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 3. Claude Code Generator | 5/5 | Complete | 2026-03-29 |
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
 | 4. Cross-Tool Output | 1/1 | Complete | 2026-03-29 |
-| 5. Community Registry | 0/2 | Not started | - |
+| 5. Community Registry | 2/2 | Complete | 2026-03-29 |
 | 6. Config Maintenance | 0/3 | Not started | - |
 | 7. Team Governance | 0/3 | Not started | - |
