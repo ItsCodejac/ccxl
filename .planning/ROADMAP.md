@@ -20,7 +20,7 @@ None
 - [x] **Phase 3.1: Critical Improvements** - INSERTED: Force config reading hooks, non-destructive merge, global install
 - [x] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
 - [x] **Phase 5: Community Registry** - Browse, install, share curated configs
-- [ ] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
+- [x] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
 - [ ] **Phase 7: Team Governance** - Shared base configs, org-wide standards
 
 ## Phase Details
@@ -102,7 +102,7 @@ Plans:
 **Plans**: 1 plan (consolidated from 3)
 
 Plans:
-- [ ] 06-01: Drift detection + diagnostics — update command, doctor command with 8 checks + auto-fix
+- [x] 06-01: Drift detection + diagnostics — update command, doctor command with 8 checks + auto-fix
 
 ### Phase 7: Team Governance
 **Goal**: Shared base configs with org-wide standards and per-project overrides
@@ -128,5 +128,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
 | 4. Cross-Tool Output | 1/1 | Complete | 2026-03-29 |
 | 5. Community Registry | 2/2 | Complete | 2026-03-29 |
-| 6. Config Maintenance | 0/1 | Not started | - |
+| 6. Config Maintenance | 1/1 | Complete | 2026-03-29 |
 | 7. Team Governance | 0/3 | Not started | - |

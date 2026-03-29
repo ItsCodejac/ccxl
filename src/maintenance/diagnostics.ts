@@ -108,5 +108,20 @@ export async function runDiagnostics(
     results.push({ name: 'Config conflicts', status: 'pass', message: 'No conflicts detected' });
   }
 
+  // 8. Governance compliance
+  const baseConfigPath = path.join(root, '.claude', 'base-config.json');
+  if (await fs.pathExists(baseConfigPath)) {
+    const { loadBaseConfig, checkCompliance } = await import('../governance/index.js');
+    const baseConfig = await loadBaseConfig(root);
+    if (baseConfig) {
+      const report = await checkCompliance(root, baseConfig);
+      if (report.compliant) {
+        results.push({ name: 'Governance', status: 'pass', message: `Compliant with "${baseConfig.name}" (${report.policies} policies)` });
+      } else {
+        results.push({ name: 'Governance', status: 'warn', message: `${report.violations.length} violation(s) against "${baseConfig.name}"` });
+      }
+    }
+  }
+
   return results;
 }
