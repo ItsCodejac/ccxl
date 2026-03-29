@@ -17,7 +17,7 @@ None
 - [x] **Phase 1: Foundation** - TypeScript project setup, Ink TUI scaffold, CLI entry point
 - [x] **Phase 2: Project Analyzer** - Deep project scanning and detection engine
 - [x] **Phase 3: Claude Code Generator** - Full Claude Code config stack generation
-- [ ] **Phase 3.1: Critical Improvements** - INSERTED: Force config reading hooks, non-destructive merge, global install
+- [x] **Phase 3.1: Critical Improvements** - INSERTED: Force config reading hooks, non-destructive merge, global install
 - [ ] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
 - [ ] **Phase 5: Community Registry** - Browse, install, share curated configs
 - [ ] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
@@ -69,9 +69,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03.1-01: Force config reading hooks — SessionStart/PreCompact hooks that ensure agents read CLAUDE.md, skills, and memory consistently
-- [ ] 03.1-02: Non-destructive merge — check existing files, merge settings/permissions, skip or prompt for conflicts
-- [ ] 03.1-03: Global install support — --global flag writes to ~/.claude/ instead of project .claude/
+- [x] 03.1-01: Force config reading hooks — SessionStart/PreCompact hooks that ensure agents read CLAUDE.md, skills, and memory consistently
+- [x] 03.1-02: Non-destructive merge — check existing files, merge settings/permissions, skip or prompt for conflicts
+- [x] 03.1-03: Global install support — --global flag writes to ~/.claude/ instead of project .claude/
 
 ### Phase 4: Cross-Tool Output
 **Goal**: Generate configuration files for Cursor, GitHub Copilot, and Windsurf from the same analyzer results
@@ -130,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 1. Foundation | 3/3 | Complete | 2026-03-28 |
 | 2. Project Analyzer | 4/4 | Complete | 2026-03-29 |
 | 3. Claude Code Generator | 5/5 | Complete | 2026-03-29 |
-| 3.1 Critical Improvements | 0/3 | Not started | - |
+| 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
 | 4. Cross-Tool Output | 0/3 | Not started | - |
 | 5. Community Registry | 0/4 | Not started | - |
 | 6. Config Maintenance | 0/3 | Not started | - |
