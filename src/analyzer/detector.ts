@@ -44,9 +44,10 @@ export class DetectorRegistry {
       if (result.status === 'fulfilled') {
         successful.push(result.value);
       } else {
-        console.warn(
-          `Detector "${this.detectors[i]!.name}" failed: ${result.reason}`,
-        );
+        // Suppress noisy stack traces — show clean warning
+        const reason = result.reason instanceof Error ? result.reason.message : String(result.reason);
+        const short = reason.includes('JSON') ? 'invalid JSON in project file' : reason.split('\n')[0];
+        console.warn(`  ! ${this.detectors[i]!.name} skipped: ${short}`);
       }
     }
 

@@ -106,6 +106,18 @@ function printAnalysis(analysis: ProjectAnalysis): void {
     console.log();
   }
 
+  if (analysis.monorepo) {
+    console.log(style.heading('Monorepo'));
+    console.log(`  ${style.success(analysis.monorepo.tool)} ${style.muted(`(${analysis.monorepo.workspaces.join(', ')})`)}`);
+    console.log();
+  }
+
+  if (analysis.languages.length === 0 && analysis.frameworks.length === 0) {
+    console.log(style.warning('  No languages or frameworks detected.'));
+    console.log(style.muted('  Configs will be generated with minimal defaults.'));
+    console.log();
+  }
+
   if (analysis.ci.length > 0) {
     console.log(style.heading('CI/CD'));
     for (const c of analysis.ci) console.log(`  ${style.success(c.name)}`);

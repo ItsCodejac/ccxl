@@ -33,6 +33,12 @@ registerConfigCommand(program);
 
 // Default action: show dashboard when no command given
 program.action(async () => {
+  // Check if stdin supports raw mode (required for interactive TUI)
+  if (!process.stdin.isTTY) {
+    program.help();
+    return;
+  }
+
   const React = await import('react');
   const { render } = await import('ink');
   const path = await import('node:path');
