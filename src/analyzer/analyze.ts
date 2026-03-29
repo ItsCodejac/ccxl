@@ -11,6 +11,7 @@ import { cloudDetector } from './detectors/cloud.js';
 import { databaseDetector } from './detectors/database.js';
 import { dockerDetector } from './detectors/docker.js';
 import { monorepoDetector } from './detectors/monorepo.js';
+import { existingConfigDetector } from './detectors/existing-config.js';
 
 export async function analyzeProject(root: string): Promise<ProjectAnalysis> {
   const registry = new DetectorRegistry();
@@ -23,6 +24,7 @@ export async function analyzeProject(root: string): Promise<ProjectAnalysis> {
   registry.register(databaseDetector);
   registry.register(dockerDetector);
   registry.register(monorepoDetector);
+  registry.register(existingConfigDetector);
 
   const results = await registry.runAll(root);
 
