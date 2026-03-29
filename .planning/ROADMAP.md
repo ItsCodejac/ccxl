@@ -89,13 +89,11 @@ Plans:
 **Depends on**: Phase 3
 **Research**: Likely (registry design patterns)
 **Research topics**: GitHub-based package registry patterns, config package format design, versioning strategy, discovery/search UX
-**Plans**: 4 plans
+**Plans**: 2 plans (consolidated from 4)
 
 Plans:
-- [ ] 05-01: Registry architecture — package format spec, manifest schema, versioning
-- [ ] 05-02: Install and uninstall — fetch from GitHub, merge into local configs, dependency resolution
-- [ ] 05-03: Browse and search — TUI browser, categories, tags, popularity, compatibility filtering
-- [ ] 05-04: Publish and share — package creation wizard, validation, GitHub publishing flow
+- [ ] 05-01: Package format + install/uninstall — manifest schema, GitHub fetch, merge into local configs
+- [ ] 05-02: Browse, search, list, publish — TUI browser, GitHub search, list installed, publish instructions
 
 ### Phase 6: Config Maintenance
 **Goal**: Detect drift between codebase state and config, evolve configs as project changes, health checks and diagnostics
@@ -131,6 +129,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 3. Claude Code Generator | 5/5 | Complete | 2026-03-29 |
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
 | 4. Cross-Tool Output | 1/1 | Complete | 2026-03-29 |
-| 5. Community Registry | 0/4 | Not started | - |
+| 5. Community Registry | 0/2 | Not started | - |
 | 6. Config Maintenance | 0/3 | Not started | - |
 | 7. Team Governance | 0/3 | Not started | - |
