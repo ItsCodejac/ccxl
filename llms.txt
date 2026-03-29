@@ -1,0 +1,51 @@
+# ccxl (Claude Code XL)
+
+> Full-stack AI coding assistant configurator. One scan generates complete configs for Claude Code, Cursor, GitHub Copilot, and Windsurf.
+
+## What This Does
+
+ccxl scans any project directory, detects languages/frameworks/infrastructure, and generates the full configuration stack for 4 AI coding tools — tuned to the specific project, not boilerplate.
+
+## Commands
+
+- `ccxl init` — Scan project and generate all configs (--dry-run, --yes, --global, --force)
+- `ccxl generate <layer>` — Generate specific config: settings, skills, hooks, agents, mcp, claude-md, cross-tool, all
+- `ccxl install <user/repo>` — Install community config package from GitHub
+- `ccxl registry search|list|browse|publish|uninstall` — Manage packages
+- `ccxl update` — Detect config drift, suggest updates (--apply)
+- `ccxl doctor` — Run diagnostics with auto-fix (--fix)
+- `ccxl config show|set|check|reset` — Manage base configs and governance
+
+## Architecture
+
+TypeScript, ESM-only, Node >= 20.
+
+- src/analyzer/ — 9 detectors (languages, frameworks, package managers, CI/CD, cloud, databases, Docker, monorepo, existing AI configs)
+- src/generators/ — 7 generators (settings.json, skills, hooks, agents, MCP, CLAUDE.md, cross-tool)
+- src/generators/cross-tool/ — Cursor (.mdc), Copilot (.instructions.md), Windsurf adapters
+- src/registry/ — GitHub-based package registry (install, uninstall, search, list)
+- src/maintenance/ — Drift detection and diagnostics
+- src/governance/ — Team base configs with policy enforcement
+- src/tui/ — Ink (React) terminal UI components
+- src/commands/ — Commander CLI command handlers
+
+## Key Patterns
+
+- Detector interface: { name, detect(root) } with DetectorRegistry running all in parallel
+- Generator interface: { name, generate(analysis, root) } with pipeline dedup by path
+- Template pattern: declarative arrays with condition functions for skills/hooks/agents
+- Non-destructive merge: JSON union for permissions, skip existing markdown/scripts
+- Zod schema-first types throughout
+
+## What Gets Generated
+
+Claude Code: .claude/settings.json, .claude/skills/*/SKILL.md, .claude/hooks/*.sh, .claude/agents/*.md, .mcp.json, CLAUDE.md
+Cursor: .cursorrules, .cursor/rules/*.mdc
+Copilot: .github/copilot-instructions.md, .github/instructions/*.instructions.md
+Windsurf: .windsurfrules, .windsurf/rules/*.md
+
+## Detection
+
+Languages: JavaScript, TypeScript, Python, Go, Rust, Java, Swift
+Frameworks: React, Next.js, Vue, Nuxt, Svelte, Angular, Express, Fastify, Prisma, Drizzle, Django, Flask, FastAPI, Vite, Vitest, Jest, and more
+Infrastructure: GitHub Actions, GitLab CI, CircleCI, AWS, GCP, Azure, Vercel, Netlify, Fly, PostgreSQL, MySQL, SQLite, MongoDB, Redis, Docker, Turborepo, Nx, pnpm workspaces
