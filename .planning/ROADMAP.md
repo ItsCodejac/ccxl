@@ -81,9 +81,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Output adapter architecture — shared analyzer results, per-tool adapters, capability mapping
-- [ ] 04-02: Cursor and Copilot adapters — .cursorrules and copilot-instructions.md generation
-- [ ] 04-03: Windsurf adapter and unified output — .windsurfrules generation, combined output with conflict detection
+- [ ] 04-01: All three adapters (Cursor, Copilot, Windsurf) — shared rules, legacy + modern formats, pipeline wiring
+(Consolidated from 3 plans to 1 — all tools use identical YAML frontmatter + markdown pattern)
 
 ### Phase 5: Community Registry
 **Goal**: Browse, install, and share curated skills, hooks, agents, and config packages from a GitHub-based registry
@@ -131,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 2. Project Analyzer | 4/4 | Complete | 2026-03-29 |
 | 3. Claude Code Generator | 5/5 | Complete | 2026-03-29 |
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
-| 4. Cross-Tool Output | 0/3 | Not started | - |
+| 4. Cross-Tool Output | 0/1 | Not started | - |
 | 5. Community Registry | 0/4 | Not started | - |
 | 6. Config Maintenance | 0/3 | Not started | - |
 | 7. Team Governance | 0/3 | Not started | - |
