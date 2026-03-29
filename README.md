@@ -1,5 +1,9 @@
 # ccxl — Claude Code XL
 
+> **v3.0.0-alpha** — This is a complete TypeScript rewrite. v3 is not compatible with v2 configs. If you previously used ccxl, run `ccxl init --dry-run` first to preview what would change before writing anything.
+
+> **Review before committing.** ccxl generates smart defaults based on your project, but always review generated configs before committing them to your repo. Use `--dry-run` to preview, `--preview` to see file contents.
+
 Full-stack AI coding assistant configurator. One scan generates complete configs for **Claude Code**, **Cursor**, **GitHub Copilot**, and **Windsurf**.
 
 ## Install
