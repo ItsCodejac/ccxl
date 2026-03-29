@@ -31,6 +31,34 @@ registerRegistryCommand(program);
 registerUpdateCommand(program);
 registerConfigCommand(program);
 
+// Default action: show dashboard when no command given
+program.action(async () => {
+  const React = await import('react');
+  const { render } = await import('ink');
+  const path = await import('node:path');
+  const fs = await import('fs-extra');
+
+  const root = process.cwd();
+  const projectName = path.default.basename(root);
+
+  const configStatus = {
+    claude: await fs.default.pathExists(path.default.join(root, '.claude', 'settings.json')),
+    cursor: await fs.default.pathExists(path.default.join(root, '.cursorrules')) || await fs.default.pathExists(path.default.join(root, '.cursor', 'rules')),
+    copilot: await fs.default.pathExists(path.default.join(root, '.github', 'copilot-instructions.md')),
+    windsurf: await fs.default.pathExists(path.default.join(root, '.windsurfrules')) || await fs.default.pathExists(path.default.join(root, '.windsurf', 'rules')),
+  };
+
+  let packageCount = 0;
+  const pkgPath = path.default.join(root, '.claude', 'ccxl-packages.json');
+  if (await fs.default.pathExists(pkgPath)) {
+    const data = await fs.default.readJson(pkgPath) as { packages: unknown[] };
+    packageCount = data.packages.length;
+  }
+
+  const { Dashboard } = await import('./tui/dashboard/Dashboard.js');
+  render(React.createElement(Dashboard, { version, projectName, configStatus, packageCount }));
+});
+
 program.parseAsync().catch((err: Error) => {
   console.error(chalk.red(`Error: ${err.message}`));
   if (program.opts().debug) {

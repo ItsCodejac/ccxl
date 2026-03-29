@@ -68,13 +68,13 @@ export function registerInitCommand(program: Command): void {
         return;
       }
 
-      // Interactive mode: render TUI
+      // Interactive wizard mode
       const React = await import('react');
       const { render } = await import('ink');
       const { version } = await import('../index.js');
-      const { InitView } = await import('../tui/views/InitView.js');
+      const { InitWizard } = await import('../tui/wizard/InitWizard.js');
 
-      render(React.createElement(InitView, { version }));
+      render(React.createElement(InitWizard, { version, root: projectRoot }));
     });
 }
 
