@@ -5,4 +5,4 @@ const pkg = require('../package.json') as { version: string };
 
 export const version = pkg.version;
 
-export type { ProjectAnalysis, ExistingConfig, GeneratorOptions } from './types/index.js';
+export type { ProjectAnalysis, ExistingConfigInfo, GeneratorOptions } from './types/index.js';

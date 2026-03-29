@@ -1,19 +1,28 @@
-export interface ProjectAnalysis {
-  name: string;
-  root: string;
-  languages: string[];
-  frameworks: string[];
-  packageManager: string | null;
-  monorepo: boolean;
-  existingConfigs: ExistingConfig[];
-}
+// Re-export all analysis types and schemas
+export {
+  type LanguageInfo,
+  type FrameworkInfo,
+  type PackageManagerInfo,
+  type MonorepoInfo,
+  type CIProviderInfo,
+  type CloudProviderInfo,
+  type DatabaseInfo,
+  type DockerInfo,
+  type ExistingConfigInfo,
+  type ProjectAnalysis,
+  LanguageInfoSchema,
+  FrameworkInfoSchema,
+  PackageManagerInfoSchema,
+  MonorepoInfoSchema,
+  CIProviderInfoSchema,
+  CloudProviderInfoSchema,
+  DatabaseInfoSchema,
+  DockerInfoSchema,
+  ExistingConfigInfoSchema,
+  ProjectAnalysisSchema,
+} from './analysis.js';
 
-export interface ExistingConfig {
-  tool: 'claude' | 'cursor' | 'copilot' | 'windsurf';
-  path: string;
-  exists: boolean;
-}
-
+/** @deprecated Use GeneratorOptions from types/analysis instead */
 export interface GeneratorOptions {
   target: 'claude' | 'cursor' | 'copilot' | 'windsurf' | 'all';
   dryRun: boolean;
