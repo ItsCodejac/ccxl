@@ -15,6 +15,7 @@ import type { WizardStep } from './state.js';
 interface InitWizardProps {
   version: string;
   root: string;
+  onExit?: () => void;
 }
 
 const STEP_LABELS: Record<WizardStep, string> = {
@@ -45,7 +46,7 @@ const STEP_HINTS: Record<WizardStep, string> = {
   done: 'enter exit',
 };
 
-export function InitWizard({ version, root }: InitWizardProps): React.ReactElement {
+export function InitWizard({ version, root, onExit }: InitWizardProps): React.ReactElement {
   const [state, dispatch] = useReducer(wizardReducer, initialWizardState);
   const app = useApp();
 
@@ -70,8 +71,18 @@ export function InitWizard({ version, root }: InitWizardProps): React.ReactEleme
   }, [state.analysis, root]);
 
   const next = useCallback(() => dispatch({ type: 'NEXT' }), []);
-  const back = useCallback(() => dispatch({ type: 'BACK' }), []);
-  const done = useCallback(() => app.exit(), [app]);
+  const back = useCallback(() => {
+    // If on first step and we have an onExit (launched from dashboard), go back to menu
+    if (state.step === 'scan' && onExit) {
+      onExit();
+    } else {
+      dispatch({ type: 'BACK' });
+    }
+  }, [state.step, onExit]);
+  const done = useCallback(() => {
+    if (onExit) onExit();
+    else app.exit();
+  }, [onExit, app]);
 
   const stepNum = STEP_NUMBERS[state.step];
   const stepLabel = STEP_LABELS[state.step];

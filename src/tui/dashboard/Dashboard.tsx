@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
 import { Header } from '../components/Header.js';
 import { colors } from '../theme.js';
+import { InitWizard } from '../wizard/InitWizard.js';
+import { DoctorView } from './DoctorView.js';
+import { UpdateView } from './UpdateView.js';
 
 interface MenuItem {
   value: string;
   label: string;
   description: string;
-  hint?: string;
 }
 
 interface DashboardProps {
   version: string;
+  root: string;
   projectName: string;
   configStatus: { claude: boolean; cursor: boolean; copilot: boolean; windsurf: boolean };
   packageCount: number;
@@ -26,20 +29,62 @@ const MENU_ITEMS: MenuItem[] = [
   { value: 'config', label: 'Config', description: 'Manage base configs' },
 ];
 
-export function Dashboard({ version, projectName, configStatus, packageCount }: DashboardProps): React.ReactElement {
+type ActiveView = 'menu' | 'init' | 'doctor' | 'update';
+
+export function Dashboard({ version, root, projectName, configStatus, packageCount }: DashboardProps): React.ReactElement {
   const [cursor, setCursor] = useState(0);
+  const [activeView, setActiveView] = useState<ActiveView>('menu');
   const app = useApp();
 
+  if (activeView === 'init') {
+    return <InitWizard version={version} root={root} onExit={() => setActiveView('menu')} />;
+  }
+
+  if (activeView === 'doctor') {
+    return <DoctorView root={root} version={version} onBack={() => setActiveView('menu')} />;
+  }
+
+  if (activeView === 'update') {
+    return <UpdateView root={root} version={version} onBack={() => setActiveView('menu')} />;
+  }
+
+  return <Menu
+    version={version}
+    projectName={projectName}
+    configStatus={configStatus}
+    packageCount={packageCount}
+    cursor={cursor}
+    setCursor={setCursor}
+    onSelect={(value) => {
+      if (value === 'init' || value === 'generate') setActiveView('init');
+      else if (value === 'doctor') setActiveView('doctor');
+      else if (value === 'update') setActiveView('update');
+      else {
+        app.exit();
+        console.log(`\nRun: ccxl ${value}`);
+      }
+    }}
+    onQuit={() => app.exit()}
+  />;
+}
+
+interface MenuProps {
+  version: string;
+  projectName: string;
+  configStatus: DashboardProps['configStatus'];
+  packageCount: number;
+  cursor: number;
+  setCursor: (fn: (c: number) => number) => void;
+  onSelect: (value: string) => void;
+  onQuit: () => void;
+}
+
+function Menu({ version, projectName, configStatus, packageCount, cursor, setCursor, onSelect, onQuit }: MenuProps): React.ReactElement {
   useInput((input, key) => {
     if (key.upArrow) setCursor((c) => Math.max(0, c - 1));
     if (key.downArrow) setCursor((c) => Math.min(MENU_ITEMS.length - 1, c + 1));
-    if (key.return) {
-      // Exit and run the selected command
-      const cmd = MENU_ITEMS[cursor]!.value;
-      app.exit();
-      console.log(`\nRun: ccxl ${cmd}`);
-    }
-    if (input === 'q') app.exit();
+    if (key.return) onSelect(MENU_ITEMS[cursor]!.value);
+    if (input === 'q') onQuit();
   });
 
   return (

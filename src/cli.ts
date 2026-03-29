@@ -57,7 +57,7 @@ program.action(async () => {
 
   try {
     const { Dashboard } = await import('./tui/dashboard/Dashboard.js');
-    render(React.createElement(Dashboard, { version, projectName, configStatus, packageCount }));
+    render(React.createElement(Dashboard, { version, root, projectName, configStatus, packageCount }));
   } catch {
     // Fallback if terminal doesn't support raw mode (e.g., piped, CI)
     program.help();
