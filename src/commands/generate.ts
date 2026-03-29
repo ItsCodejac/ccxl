@@ -62,6 +62,8 @@ async function runAndOutput(
       console.log(style.muted(file.content));
       console.log();
     }
+    console.log(style.muted('Preview only — no files written. Remove --preview to write.'));
+    return;
   }
 
   if (options.dryRun) {
