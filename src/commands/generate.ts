@@ -11,6 +11,7 @@ import {
   agentsGenerator,
   mcpGenerator,
   claudeMdGenerator,
+  crossToolGenerator,
 } from '../generators/index.js';
 import type { Generator, GeneratedFile } from '../generators/index.js';
 
@@ -21,6 +22,7 @@ const generatorMap: Record<string, Generator> = {
   agents: agentsGenerator,
   mcp: mcpGenerator,
   'claude-md': claudeMdGenerator,
+  'cross-tool': crossToolGenerator,
 };
 
 async function runAndOutput(

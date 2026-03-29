@@ -9,6 +9,7 @@ import { hooksGenerator } from './hooks.js';
 import { agentsGenerator } from './agents.js';
 import { mcpGenerator } from './mcp.js';
 import { claudeMdGenerator } from './claude-md.js';
+import { crossToolGenerator } from './cross-tool/index.js';
 import { mergeWithExisting } from './merge.js';
 
 export interface PipelineOptions {
@@ -54,10 +55,11 @@ export async function runPipeline(
   pipeline.register(hooksGenerator);
   pipeline.register(agentsGenerator);
 
-  // MCP and CLAUDE.md only for project scope
+  // MCP, CLAUDE.md, and cross-tool only for project scope
   if (scope === 'project') {
     pipeline.register(mcpGenerator);
     pipeline.register(claudeMdGenerator);
+    pipeline.register(crossToolGenerator);
   }
 
   const targetRoot = getTargetRoot(scope, root);
@@ -82,4 +84,4 @@ export async function runPipeline(
   return files;
 }
 
-export { settingsGenerator, skillsGenerator, hooksGenerator, agentsGenerator, mcpGenerator, claudeMdGenerator };
+export { settingsGenerator, skillsGenerator, hooksGenerator, agentsGenerator, mcpGenerator, claudeMdGenerator, crossToolGenerator };

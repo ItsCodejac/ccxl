@@ -9,3 +9,4 @@ export { hooksGenerator } from './hooks.js';
 export { agentsGenerator } from './agents.js';
 export { mcpGenerator } from './mcp.js';
 export { claudeMdGenerator } from './claude-md.js';
+export { crossToolGenerator } from './cross-tool/index.js';
