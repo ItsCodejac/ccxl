@@ -1,5 +1,6 @@
 import type { ProjectAnalysis } from '../types/index.js';
-import type { Generator, GeneratorResult } from './generator.js';
+import type { Generator } from './generator.js';
+import type { GeneratorResult } from './types.js';
 
 interface SettingsJson {
   permissions: {
