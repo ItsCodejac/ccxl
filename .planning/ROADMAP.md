@@ -18,7 +18,7 @@ None
 - [x] **Phase 2: Project Analyzer** - Deep project scanning and detection engine
 - [x] **Phase 3: Claude Code Generator** - Full Claude Code config stack generation
 - [x] **Phase 3.1: Critical Improvements** - INSERTED: Force config reading hooks, non-destructive merge, global install
-- [ ] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
+- [x] **Phase 4: Cross-Tool Output** - Multi-tool config generation (Cursor, Copilot, Windsurf)
 - [ ] **Phase 5: Community Registry** - Browse, install, share curated configs
 - [ ] **Phase 6: Config Maintenance** - Drift detection, diagnostics, config evolution
 - [ ] **Phase 7: Team Governance** - Shared base configs, org-wide standards
@@ -81,7 +81,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: All three adapters (Cursor, Copilot, Windsurf) — shared rules, legacy + modern formats, pipeline wiring
+- [x] 04-01: All three adapters (Cursor, Copilot, Windsurf) — shared rules, legacy + modern formats, pipeline wiring
 (Consolidated from 3 plans to 1 — all tools use identical YAML frontmatter + markdown pattern)
 
 ### Phase 5: Community Registry
@@ -130,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 2. Project Analyzer | 4/4 | Complete | 2026-03-29 |
 | 3. Claude Code Generator | 5/5 | Complete | 2026-03-29 |
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
-| 4. Cross-Tool Output | 0/1 | Not started | - |
+| 4. Cross-Tool Output | 1/1 | Complete | 2026-03-29 |
 | 5. Community Registry | 0/4 | Not started | - |
 | 6. Config Maintenance | 0/3 | Not started | - |
 | 7. Team Governance | 0/3 | Not started | - |
