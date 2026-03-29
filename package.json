@@ -1,12 +1,12 @@
 {
   "name": "ccxl",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0",
   "description": "ccxl (Claude Code XL) — Full-stack AI coding assistant configurator. Generate complete Claude Code, Cursor, Copilot, and Windsurf configs from a single scan.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ccxl": "./dist/cli.js"
+    "ccxl": "dist/cli.js"
   },
   "engines": {
     "node": ">=20.0.0"
