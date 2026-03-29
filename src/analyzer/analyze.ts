@@ -3,12 +3,16 @@ import { ProjectAnalysisSchema } from '../types/index.js';
 import type { ProjectAnalysis } from '../types/index.js';
 import { DetectorRegistry } from './detector.js';
 import type { DetectorResult } from './detector.js';
+import { languageDetector } from './detectors/language.js';
+import { frameworkDetector } from './detectors/framework.js';
+import { packageManagerDetector } from './detectors/package-manager.js';
 
 export async function analyzeProject(root: string): Promise<ProjectAnalysis> {
   const registry = new DetectorRegistry();
 
-  // Detectors are registered here as they're implemented in Plans 02-02 through 02-04.
-  // Each detector module exports a Detector object that gets imported and registered.
+  registry.register(languageDetector);
+  registry.register(frameworkDetector);
+  registry.register(packageManagerDetector);
 
   const results = await registry.runAll(root);
 
