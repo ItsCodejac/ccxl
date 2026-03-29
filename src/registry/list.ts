@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import type { InstalledPackage, PackageRegistry } from './types.js';
+import { PackageRegistrySchema } from './types.js';
+import type { InstalledPackage } from './types.js';
 
 export async function listInstalled(root: string): Promise<InstalledPackage[]> {
   const registryPath = path.join(root, '.claude', 'ccxl-packages.json');
@@ -9,6 +10,7 @@ export async function listInstalled(root: string): Promise<InstalledPackage[]> {
     return [];
   }
 
-  const registry = await fs.readJson(registryPath) as PackageRegistry;
+  const data = await fs.readJson(registryPath);
+  const registry = PackageRegistrySchema.parse(data);
   return registry.packages;
 }

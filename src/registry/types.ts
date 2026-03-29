@@ -6,7 +6,7 @@ export const PackageManifestSchema = z.object({
   description: z.string().max(250),
   author: z.string().optional(),
   type: z.enum(['skill', 'hook', 'agent', 'config', 'bundle']),
-  files: z.array(z.string()).min(1),
+  files: z.array(z.string().regex(/^[a-zA-Z0-9._\-/]+$/, 'File paths must not contain ".." or special characters')).min(1),
   keywords: z.array(z.string()).default([]),
   compatibility: z.object({
     languages: z.array(z.string()).optional(),

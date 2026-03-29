@@ -1,8 +1,28 @@
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'fs-extra';
-import { PackageManifestSchema } from './types.js';
+import { execFileSync } from 'node:child_process';
+import { PackageManifestSchema, PackageRegistrySchema } from './types.js';
 import type { InstalledPackage, PackageRegistry } from './types.js';
+
+const SAFE_PATH_RE = /^[a-zA-Z0-9._\-/]+$/;
+
+function validateFilePath(file: string, baseDir: string): string {
+  if (!SAFE_PATH_RE.test(file) || file.includes('..')) {
+    throw new Error(`Unsafe file path in package manifest: ${file}`);
+  }
+  const resolved = path.resolve(baseDir, file);
+  if (!resolved.startsWith(path.resolve(baseDir))) {
+    throw new Error(`Path traversal detected in package file: ${file}`);
+  }
+  return resolved;
+}
+
+function validateOwnerRepo(value: string): void {
+  if (!/^[a-zA-Z0-9_.-]+$/.test(value)) {
+    throw new Error(`Invalid GitHub identifier: ${value}`);
+  }
+}
 
 export async function installPackage(
   source: string,
@@ -11,10 +31,10 @@ export async function installPackage(
 ): Promise<InstalledPackage> {
   const targetRoot = options.global ? path.join(os.homedir(), '.claude') : root;
 
-  // Parse source: "user/repo" or full URL
   const { owner, repo } = parseSource(source);
+  validateOwnerRepo(owner);
+  validateOwnerRepo(repo);
 
-  // Fetch tarball
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ccxl-install-'));
   try {
     const tarballUrl = `https://api.github.com/repos/${owner}/${repo}/tarball/main`;
@@ -27,23 +47,19 @@ export async function installPackage(
       throw new Error(`Failed to fetch ${owner}/${repo}: ${response.status} ${response.statusText}`);
     }
 
-    // Extract tarball
     const buffer = Buffer.from(await response.arrayBuffer());
     const tarPath = path.join(tmpDir, 'package.tar.gz');
     await fs.writeFile(tarPath, buffer);
 
-    // Use tar to extract
-    const { execSync } = await import('node:child_process');
-    execSync(`tar -xzf "${tarPath}" -C "${tmpDir}"`, { stdio: 'pipe' });
+    // Use execFileSync to avoid shell injection
+    execFileSync('tar', ['-xzf', tarPath, '-C', tmpDir], { stdio: 'pipe' });
 
-    // Find the extracted directory (GitHub adds a prefix)
     const entries = await fs.readdir(tmpDir);
     const extractedDir = entries.find((e) => e !== 'package.tar.gz');
     if (!extractedDir) throw new Error('Failed to extract package');
 
     const packageDir = path.join(tmpDir, extractedDir);
 
-    // Read and validate manifest
     const manifestPath = path.join(packageDir, 'ccxl-package.json');
     if (!await fs.pathExists(manifestPath)) {
       throw new Error(`No ccxl-package.json found in ${owner}/${repo}`);
@@ -53,7 +69,6 @@ export async function installPackage(
     const manifest = PackageManifestSchema.parse(manifestData);
 
     if (options.preview) {
-      // Return without writing
       return {
         name: manifest.name,
         version: manifest.version,
@@ -63,11 +78,12 @@ export async function installPackage(
       };
     }
 
-    // Copy files to target
+    // Copy files with path traversal protection
+    const claudeDir = path.join(targetRoot, '.claude');
     const installedFiles: string[] = [];
     for (const file of manifest.files) {
+      const destPath = validateFilePath(file, claudeDir);
       const srcPath = path.join(packageDir, file);
-      const destPath = path.join(targetRoot, '.claude', file);
 
       if (!await fs.pathExists(srcPath)) {
         console.warn(`Warning: ${file} listed in manifest but not found in package`);
@@ -79,7 +95,6 @@ export async function installPackage(
       installedFiles.push(file);
     }
 
-    // Record installation
     const installed: InstalledPackage = {
       name: manifest.name,
       version: manifest.version,
@@ -96,15 +111,13 @@ export async function installPackage(
 }
 
 function parseSource(source: string): { owner: string; repo: string } {
-  // Handle "user/repo" format
   if (source.includes('/') && !source.includes('://')) {
     const [owner, repo] = source.split('/');
     if (!owner || !repo) throw new Error(`Invalid source: ${source}. Use format: user/repo`);
     return { owner, repo };
   }
 
-  // Handle full GitHub URL
-  const match = source.match(/github\.com\/([^/]+)\/([^/]+)/);
+  const match = source.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)/);
   if (match) return { owner: match[1]!, repo: match[2]!.replace(/\.git$/, '') };
 
   throw new Error(`Invalid source: ${source}. Use format: user/repo or a GitHub URL`);
@@ -115,10 +128,10 @@ async function recordInstallation(root: string, pkg: InstalledPackage): Promise<
 
   let registry: PackageRegistry = { packages: [] };
   if (await fs.pathExists(registryPath)) {
-    registry = await fs.readJson(registryPath) as PackageRegistry;
+    const data = await fs.readJson(registryPath);
+    registry = PackageRegistrySchema.parse(data);
   }
 
-  // Replace existing entry for same package name
   registry.packages = registry.packages.filter((p) => p.name !== pkg.name);
   registry.packages.push(pkg);
 
