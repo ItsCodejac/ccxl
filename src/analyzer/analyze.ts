@@ -6,6 +6,11 @@ import type { DetectorResult } from './detector.js';
 import { languageDetector } from './detectors/language.js';
 import { frameworkDetector } from './detectors/framework.js';
 import { packageManagerDetector } from './detectors/package-manager.js';
+import { ciDetector } from './detectors/ci.js';
+import { cloudDetector } from './detectors/cloud.js';
+import { databaseDetector } from './detectors/database.js';
+import { dockerDetector } from './detectors/docker.js';
+import { monorepoDetector } from './detectors/monorepo.js';
 
 export async function analyzeProject(root: string): Promise<ProjectAnalysis> {
   const registry = new DetectorRegistry();
@@ -13,6 +18,11 @@ export async function analyzeProject(root: string): Promise<ProjectAnalysis> {
   registry.register(languageDetector);
   registry.register(frameworkDetector);
   registry.register(packageManagerDetector);
+  registry.register(ciDetector);
+  registry.register(cloudDetector);
+  registry.register(databaseDetector);
+  registry.register(dockerDetector);
+  registry.register(monorepoDetector);
 
   const results = await registry.runAll(root);
 
