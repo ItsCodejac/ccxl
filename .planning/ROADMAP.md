@@ -57,7 +57,7 @@ Plans:
 Plans:
 - [x] 03-01: Settings and permissions generator — fine-grained permission rules matched to detected stack
 - [x] 03-02: Skills generator — .claude/skills/ with proper frontmatter, triggers, tool restrictions, project-appropriate skills
-- [ ] 03-03: Hooks generator — PreToolUse/PostToolUse hooks using current event system, matchers, hook types
+- [x] 03-03: Hooks generator — PreToolUse/PostToolUse hooks using current event system, matchers, hook types
 - [ ] 03-04: Agents and MCP generator — AGENTS.md with project-appropriate subagents, .mcp.json with relevant MCP servers
 - [ ] 03-05: CLAUDE.md and extras generator — deep codebase-aware project context, keybindings, status line, output styles
 
@@ -118,7 +118,7 @@ Note: Phase 4 can run in parallel with Phase 3 (both depend on Phase 2)
 |-------|---------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-28 |
 | 2. Project Analyzer | 4/4 | Complete | 2026-03-29 |
-| 3. Claude Code Generator | 2/5 | In progress | - |
+| 3. Claude Code Generator | 3/5 | In progress | - |
 | 4. Cross-Tool Output | 0/3 | Not started | - |
 | 5. Community Registry | 0/4 | Not started | - |
 | 6. Config Maintenance | 0/3 | Not started | - |
