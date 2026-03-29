@@ -98,8 +98,8 @@ describe('mcpGenerator', () => {
     expect(result.files).toHaveLength(1);
     expect(result.files[0]!.path).toBe('.mcp.json');
     const config = JSON.parse(result.files[0]!.content);
-    expect(config.postgres).toBeDefined();
-    expect(config.postgres.env.DATABASE_URL).toBe('$DATABASE_URL');
+    expect(config.mcpServers.postgres).toBeDefined();
+    expect(config.mcpServers.postgres.env.DATABASE_URL).toBe('$DATABASE_URL');
   });
 
   it('generates github MCP for GitHub Actions projects', async () => {
@@ -108,7 +108,7 @@ describe('mcpGenerator', () => {
     });
     const result = await mcpGenerator.generate(analysis, '/tmp/test');
     const config = JSON.parse(result.files[0]!.content);
-    expect(config.github).toBeDefined();
+    expect(config.mcpServers.github).toBeDefined();
   });
 
   it('generates no .mcp.json when no servers needed', async () => {
@@ -122,7 +122,7 @@ describe('mcpGenerator', () => {
     });
     const result = await mcpGenerator.generate(analysis, '/tmp/test');
     const config = JSON.parse(result.files[0]!.content);
-    expect(config.postgres.command).toBe('npx');
-    expect(config.postgres.args[0]).toBe('-y');
+    expect(config.mcpServers.postgres.command).toBe('npx');
+    expect(config.mcpServers.postgres.args[0]).toBe('-y');
   });
 });

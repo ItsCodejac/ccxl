@@ -58,6 +58,9 @@ export function registerInitCommand(program: Command): void {
           const fullPath = path.join(targetRoot, file.path);
           await fs.ensureDir(path.dirname(fullPath));
           await fs.writeFile(fullPath, file.content);
+          if (file.path.endsWith('.sh')) {
+            await fs.chmod(fullPath, 0o755);
+          }
         }
 
         console.log(`\n${style.success('✓')} ${style.bold(`${toWrite.length} files written`)}${unchangedFiles.length > 0 ? ` (${unchangedFiles.length} existing preserved)` : ''}`);

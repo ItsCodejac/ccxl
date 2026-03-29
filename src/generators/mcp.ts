@@ -66,7 +66,7 @@ export const mcpGenerator: Generator = {
     return {
       files: [{
         path: '.mcp.json',
-        content: JSON.stringify(servers, null, 2),
+        content: JSON.stringify({ mcpServers: servers }, null, 2),
         status: 'new',
       }],
       summary: `Generated .mcp.json with ${Object.keys(servers).length} servers`,

@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import chalk from 'chalk';
 import { version } from './index.js';
 import { registerInitCommand } from './commands/init.js';
 import { registerGenerateCommand } from './commands/generate.js';
@@ -15,7 +16,12 @@ program
   .description('ccxl (Claude Code XL) — Full-stack AI coding assistant configurator.\nGenerate complete Claude Code, Cursor, Copilot, and Windsurf configs from a single scan.')
   .version(version)
   .option('--no-color', 'Disable colored output')
-  .option('--debug', 'Enable debug logging');
+  .option('--debug', 'Enable debug logging')
+  .hook('preAction', () => {
+    if (program.opts().color === false) {
+      chalk.level = 0;
+    }
+  });
 
 registerInitCommand(program);
 registerGenerateCommand(program);
@@ -25,4 +31,10 @@ registerRegistryCommand(program);
 registerUpdateCommand(program);
 registerConfigCommand(program);
 
-program.parse();
+program.parseAsync().catch((err: Error) => {
+  console.error(chalk.red(`Error: ${err.message}`));
+  if (program.opts().debug) {
+    console.error(err.stack);
+  }
+  process.exit(1);
+});

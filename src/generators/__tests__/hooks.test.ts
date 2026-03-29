@@ -58,20 +58,21 @@ describe('hooksGenerator', () => {
     expect(paths).not.toContain('.claude/hooks/auto-format.sh');
   });
 
-  it('generates hooks.json with event configs', async () => {
+  it('merges hook config into settings.json under hooks key', async () => {
     const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
-    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
-    expect(hooksJson).toBeDefined();
-    const config = JSON.parse(hooksJson!.content);
-    expect(config.PreToolUse).toBeDefined();
-    expect(config.PreToolUse.length).toBeGreaterThanOrEqual(2);
+    const settingsFile = result.files.find((f) => f.path === '.claude/settings.json');
+    expect(settingsFile).toBeDefined();
+    const config = JSON.parse(settingsFile!.content);
+    expect(config.hooks).toBeDefined();
+    expect(config.hooks.PreToolUse).toBeDefined();
+    expect(config.hooks.PreToolUse.length).toBeGreaterThanOrEqual(2);
   });
 
   it('PreToolUse hooks have proper matcher and if fields', async () => {
     const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
-    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
-    const config = JSON.parse(hooksJson!.content);
-    const preToolUse = config.PreToolUse as Array<{ matcher: string; hooks: Array<{ if?: string }> }>;
+    const settingsFile = result.files.find((f) => f.path === '.claude/settings.json');
+    const config = JSON.parse(settingsFile!.content);
+    const preToolUse = config.hooks.PreToolUse as Array<{ matcher: string; hooks: Array<{ if?: string }> }>;
     for (const hook of preToolUse) {
       expect(hook.matcher).toBe('Bash');
       expect(hook.hooks[0]?.if).toBeDefined();
@@ -82,18 +83,18 @@ describe('hooksGenerator', () => {
     const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
     const paths = result.files.map((f) => f.path);
     expect(paths).toContain('.claude/hooks/context-loader.sh');
-    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
-    const config = JSON.parse(hooksJson!.content);
-    expect(config.SessionStart).toBeDefined();
+    const settingsFile = result.files.find((f) => f.path === '.claude/settings.json');
+    const config = JSON.parse(settingsFile!.content);
+    expect(config.hooks.SessionStart).toBeDefined();
   });
 
   it('always generates reread-context.sh for PreCompact', async () => {
     const result = await hooksGenerator.generate(makeAnalysis(), '/tmp/test');
     const paths = result.files.map((f) => f.path);
     expect(paths).toContain('.claude/hooks/reread-context.sh');
-    const hooksJson = result.files.find((f) => f.path === '.claude/hooks.json');
-    const config = JSON.parse(hooksJson!.content);
-    expect(config.PreCompact).toBeDefined();
+    const settingsFile = result.files.find((f) => f.path === '.claude/settings.json');
+    const config = JSON.parse(settingsFile!.content);
+    expect(config.hooks.PreCompact).toBeDefined();
   });
 
   it('context-loader outputs valid JSON format', async () => {

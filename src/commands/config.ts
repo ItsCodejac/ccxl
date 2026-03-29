@@ -57,9 +57,8 @@ export function registerConfigCommand(program: Command): void {
       if (key === 'base') {
         try {
           console.log(style.highlight(`Fetching base config from ${value}...`));
-          const pkg = await installPackage(value, root, { preview: true });
-          // The package should contain a base-config.json
-          console.log(`${style.success('✓')} Base config "${pkg.name}" ready`);
+          const pkg = await installPackage(value, root, { global: false });
+          console.log(`${style.success('✓')} Base config "${pkg.name}@${pkg.version}" installed`);
           console.log(style.muted('Run `ccxl config check` to verify compliance.'));
         } catch (err) {
           console.log(style.error(`Failed: ${(err as Error).message}`));
