@@ -99,12 +99,10 @@ Plans:
 **Goal**: Detect drift between codebase state and config, evolve configs as project changes, health checks and diagnostics
 **Depends on**: Phase 3
 **Research**: Unlikely (internal diffing/comparison logic)
-**Plans**: 3 plans
+**Plans**: 1 plan (consolidated from 3)
 
 Plans:
-- [ ] 06-01: Drift detection — compare current codebase against generated configs, flag stale/mismatched settings
-- [ ] 06-02: Config evolution — auto-suggest updates when dependencies change, new files added, framework migrations
-- [ ] 06-03: Diagnostics — health checks, permission audits, config validation, conflict detection, fix suggestions
+- [ ] 06-01: Drift detection + diagnostics — update command, doctor command with 8 checks + auto-fix
 
 ### Phase 7: Team Governance
 **Goal**: Shared base configs with org-wide standards and per-project overrides
@@ -130,5 +128,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7
 | 3.1 Critical Improvements | 3/3 | Complete | 2026-03-29 |
 | 4. Cross-Tool Output | 1/1 | Complete | 2026-03-29 |
 | 5. Community Registry | 2/2 | Complete | 2026-03-29 |
-| 6. Config Maintenance | 0/3 | Not started | - |
+| 6. Config Maintenance | 0/1 | Not started | - |
 | 7. Team Governance | 0/3 | Not started | - |
