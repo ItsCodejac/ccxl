@@ -41,3 +41,4 @@ temp/
 # Generated docs (can regenerate)
 docs/fetched/
 docs/combined-docs.md
+site/
